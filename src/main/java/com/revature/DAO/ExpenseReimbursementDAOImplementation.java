@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.revature.NewBankAppSwitch;
+
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
 
 	private static String url = System.getenv("Training_DB_URL");
@@ -13,15 +15,25 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 	private static String password = System.getenv("Training_DB_password");
 
 	@Override
-	public void employeeLogIn(String uName, String pWord) {
-		// TODO Auto-generated method stub
+	public void reimburseLogIn(String uName, String pWord) {
+		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+			String sql = "SELECT user_name, password FROM revature_customers WHERE rb_cust_id=" + customerIDInfo;
+			PreparedStatement prepState = connection.prepareStatement(sql);
+			ResultSet revAccnts = prepState.executeQuery();
+			if (revAccnts.next()) {
+				custUN = revAccnts.getString("user_name");
+				pwrd = revAccnts.getString("password");
+				if (custUN.equals(custUseNm) && pwrd.equals(custPWRD)) {
+					System.out.println("Thank you for logging in");
+					return;
+				}
+			}
+			System.out.println("You're login credentials are invalid");
+			NewBankAppSwitch.showCustomerMenu();
 
-	}
-
-	@Override
-	public void customerLogIn(String uName, String pWord) {
-		// TODO Auto-generated method stub
-
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
