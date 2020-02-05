@@ -6,11 +6,11 @@ public interface ExpenseReimbursementDAO {
 	
 	void customerLogIn(String uName, String pWord);
 	
-	void employeeSubmitReimburse (int type, double amount, String description);
+	void employeeSubmitReimburse (int type, double amount, String empForKey, String description);
 	
 	void viewAllReimburseReq();
 	
-	boolean resolveReimburse();
+	boolean resolveReimburse(String finManForeignKey, boolean approvalStatus);
 	
 	void viewPending();
 
