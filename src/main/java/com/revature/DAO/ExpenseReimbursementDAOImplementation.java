@@ -1,91 +1,109 @@
 package com.revature.DAO;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
+    private final Connection con;
 
-	private static String url = System.getenv("Training_DB_URL");
-	private static String username = System.getenv("Training_DB_Username");
-	private static String password = System.getenv("Training_DB_password");
+    public ExpenseReimbursementDAOImplementation() throws SQLException, IOException {
+        Map<String, String> settings = new HashMap<>();
+        File file = new File("db.properties");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
 
-	@Override
-	public void employeeLogIn(String uName, String pWord) {
-		// TODO Auto-generated method stub
+        while ((line = reader.readLine()) != null) {
+            String[] setting = line.split(" ");
 
-	}
+            settings.put(setting[0], setting[1]);
+        }
 
-	@Override
-	public void customerLogIn(String uName, String pWord) {
-		// TODO Auto-generated method stub
+        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+        con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL", settings.get("user"), settings.get("pass"));
+    }
 
-	}
+    @Override
+    public void employeeLogIn(String uName, String pWord) {
 
-	@Override
-	public void employeeSubmitReimburse(int type, double amount, String empForKey, String description) {
-		try (Connection conn = DriverManager.getConnection(url, username, password)) {
-			String sql = "INSERT INTO revature_employees (rb_emp_id, user_name, password, first_name, last_name) VALUES(null, ?,?,?,?)";
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, userName);
-			ps.setInt(2, pword);
-			ps.setString(3, fName);
-			ps.setString(4, lName);
-			ps.executeUpdate();
-			System.out.println("You have created a new employee record.");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    }
 
-	@Override
-	public void viewAllReimburseReq() {
-		try (Connection connection = DriverManager.getConnection(url, username, password)) {
-			String sql = "SELECT * FROM revature_bank_account";
-			PreparedStatement prepState = connection.prepareStatement(sql);
-			ResultSet revAccnts = prepState.executeQuery();
-			while (revAccnts.next()) {
-				int id = revAccnts.getInt("rb_acct_id");
-				String accntName = revAccnts.getString("account_name");
-				String accntNum = revAccnts.getString("account_number");
-				int bal = revAccnts.getInt("balance");
-				System.out.println(id + " " + accntName + " " + accntNum + " " + bal);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void customerLogIn(String uName, String pWord) {
 
-	@Override
-	public boolean resolveReimburse(String finManForeignKey, boolean approvalStatus) {
-		try (Connection conn = DriverManager.getConnection(url, username, password)) {
-			String sql = "UPDATE revature_bank_account SET balance=" + balance + " WHERE rb_acct_id=" + acctID;
-			PreparedStatement ps = conn.prepareStatement(sql);
-			int newBalance = ps.executeUpdate();
-			System.out.println("You have deposited $" + deposit + " and your new balance is $" + balance);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+    }
 
-	@Override
-	public void viewPending() {
-		try (Connection connection = DriverManager.getConnection(url, username, password)) {
-			String sql = "SELECT * FROM revature_bank_account";
-			PreparedStatement prepState = connection.prepareStatement(sql);
-			ResultSet revAccnts = prepState.executeQuery();
-			while (revAccnts.next()) {
-				int id = revAccnts.getInt("rb_acct_id");
-				String accntName = revAccnts.getString("account_name");
-				String accntNum = revAccnts.getString("account_number");
-				int bal = revAccnts.getInt("balance");
-				System.out.println(id + " " + accntName + " " + accntNum + " " + bal);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void employeeSubmitReimburse(int type, double amount, String empForKey, String description) {
+        try {
+            String sql = "INSERT INTO revature_employees (rb_emp_id, user_name, password, first_name, last_name) VALUES(null, ?,?,?,?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, userName);
+            ps.setInt(2, pword);
+            ps.setString(3, fName);
+            ps.setString(4, lName);
+            ps.executeUpdate();
+            System.out.println("You have created a new employee record.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void viewAllReimburseReq() {
+        try {
+            String sql = "SELECT * FROM revature_bank_account";
+            PreparedStatement prepState = con.prepareStatement(sql);
+            ResultSet revAccnts = prepState.executeQuery();
+
+            while (revAccnts.next()) {
+                int id = revAccnts.getInt("rb_acct_id");
+                String accntName = revAccnts.getString("account_name");
+                String accntNum = revAccnts.getString("account_number");
+                int bal = revAccnts.getInt("balance");
+                System.out.println(id + " " + accntName + " " + accntNum + " " + bal);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean resolveReimburse(String finManForeignKey, boolean approvalStatus) {
+        try {
+            String sql = "UPDATE revature_bank_account SET balance=" + balance + " WHERE rb_acct_id=" + acctID;
+            PreparedStatement ps = con.prepareStatement(sql);
+            int newBalance = ps.executeUpdate();
+            System.out.println("You have deposited $" + deposit + " and your new balance is $" + balance);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void viewPending() {
+        try {
+            String sql = "SELECT * FROM revature_bank_account";
+            PreparedStatement prepState = con.prepareStatement(sql);
+            ResultSet revAccnts = prepState.executeQuery();
+            while (revAccnts.next()) {
+                int id = revAccnts.getInt("rb_acct_id");
+                String accntName = revAccnts.getString("account_name");
+                String accntNum = revAccnts.getString("account_number");
+                int bal = revAccnts.getInt("balance");
+                System.out.println(id + " " + accntName + " " + accntNum + " " + bal);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
