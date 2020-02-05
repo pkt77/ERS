@@ -35,9 +35,9 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 
 	@Override
 	public void reimburseLogIn(String uName, String pWord) {
-		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		try  {
 			String sql = "SELECT user_name, password FROM revature_customers WHERE rb_cust_id=" + customerIDInfo;
-			PreparedStatement prepState = connection.prepareStatement(sql);
+			PreparedStatement prepState = con.prepareStatement(sql);
 			ResultSet revAccnts = prepState.executeQuery();
 			if (revAccnts.next()) {
 				custUN = revAccnts.getString("user_name");
