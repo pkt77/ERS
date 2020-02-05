@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.revature.NewBankAppSwitch;
+
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
     private final Connection con;
 
@@ -31,15 +33,27 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
         con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL", settings.get("user"), settings.get("pass"));
     }
 
-    @Override
-    public void employeeLogIn(String uName, String pWord) {
+	@Override
+	public void reimburseLogIn(String uName, String pWord) {
+		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+			String sql = "SELECT user_name, password FROM revature_customers WHERE rb_cust_id=" + customerIDInfo;
+			PreparedStatement prepState = connection.prepareStatement(sql);
+			ResultSet revAccnts = prepState.executeQuery();
+			if (revAccnts.next()) {
+				custUN = revAccnts.getString("user_name");
+				pwrd = revAccnts.getString("password");
+				if (custUN.equals(custUseNm) && pwrd.equals(custPWRD)) {
+					System.out.println("Thank you for logging in");
+					return;
+				}
+			}
+			System.out.println("You're login credentials are invalid");
+			NewBankAppSwitch.showCustomerMenu();
 
-    }
-
-    @Override
-    public void customerLogIn(String uName, String pWord) {
-
-    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
     @Override
     public void employeeSubmitReimburse(int type, double amount, String empForKey, String description) {

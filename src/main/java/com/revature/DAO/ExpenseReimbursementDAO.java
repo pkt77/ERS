@@ -2,15 +2,14 @@ package com.revature.DAO;
 
 public interface ExpenseReimbursementDAO {
 
-    void employeeLogIn(String uName, String pWord);
+	void reimburseLogIn(String uName, String pWord);
 
-    void customerLogIn(String uName, String pWord);
+	void employeeSubmitReimburse (int type, double amount, String empForKey, String description);
 
-    void employeeSubmitReimburse(int type, double amount, String empForKey, String description);
+	void viewAllReimburseReq();
 
-    void viewAllReimburseReq();
+	boolean resolveReimburse(String finManForeignKey, boolean approvalStatus);
 
-    boolean resolveReimburse(String finManForeignKey, boolean approvalStatus);
+	void viewPending();
 
-    void viewPending();
 }
