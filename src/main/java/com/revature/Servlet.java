@@ -21,7 +21,7 @@ public class Servlet extends HttpServlet {
         System.setOut(new PrintStream(response.getOutputStream()));
 
         ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).viewAllReimburseReq();
-        // service.viewAllReimburseReq();
+        //service.viewAllReimburseReq();
         //response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }
