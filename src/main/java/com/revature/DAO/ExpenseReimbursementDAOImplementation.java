@@ -98,8 +98,7 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 
 	@Override
 	public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
-		try {
-			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status=" 
+		try {			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="  
 					+ approvalStatus + " WHERE reim_id="+reimburseID;
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			prepstate.executeUpdate();
