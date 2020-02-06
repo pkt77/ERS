@@ -1,4 +1,4 @@
-package ExpenseReimbursementServlet;
+package com.revature.expensereimburseservlets;
 
 import javax.servlet.http.HttpServlet;
 
