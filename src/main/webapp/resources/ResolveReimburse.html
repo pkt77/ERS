@@ -6,5 +6,39 @@
 </head>
 <body>
 
+<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>View ALL PENDING REIMBURSEMENT REQUESTS</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+		<input type="submit" value="Login"/>
+		</form>
+	</div>
+	
+	<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>VIEW ALL REIMBURSEMENTS (PENDING AND RESOLVED)</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+			<input placeholder="enter password" name="password"/><br>
+			<input type="submit" value="Login"/>
+		</form>
+	</div>
+	
+	<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>RESOLVE PENDING REIMBURSEMENT REQUESTS</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+			<fieldset>
+			<input placeholder="Finance Manager number" name="username"/><br>
+			<legend>Select Status:</legend>
+			<select id  = "reiburse status">
+			<option value = "1">Approve</option>
+			<option value = "2">Deny</option>
+			</select>
+			<input type="Finance Manager Number" value="Login"/>
+			<input type="submit" value="Login"/>
+			</fieldset>
+		</form>
+	</div>
+
 </body>
 </html>
