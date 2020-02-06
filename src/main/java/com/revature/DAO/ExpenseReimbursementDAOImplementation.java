@@ -136,4 +136,42 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void emplogin() {
+		try {
+			String sql = "SELECT emp_uname, emp_pword FROM employee";
+			PreparedStatement prepstate = con.prepareStatement(sql);
+			ResultSet rset = prepstate.executeQuery();
+			while (rset.next()) {
+				String employeeUsername = rset.getString("emp_uname");
+				String employeePassword = rset.getString("emp_pword");
+
+
+				System.out.println("Username:" + employeeUsername + "\n Password: " + employeePassword);
+			}
+			prepstate.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void manlogin() {
+		try {
+			String sql = "SELECT man_uname, man_pword FROM managers";
+			PreparedStatement prepstate = con.prepareStatement(sql);
+			ResultSet rset = prepstate.executeQuery();
+			while (rset.next()) {
+				String managerUsername = rset.getString("man_uname");
+				String managerPassword = rset.getString("man_pword");
+
+
+				System.out.println("Username:" + managerUsername + "\n Password: " + managerPassword);
+			}
+			prepstate.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

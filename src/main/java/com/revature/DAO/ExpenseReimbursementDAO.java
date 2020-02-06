@@ -11,5 +11,9 @@ public interface ExpenseReimbursementDAO {
 	void resolveReimburse(String finManFM, int appStat, int rID);
 
 	void viewPending();
+	
+	void emplogin();
+	
+	void manlogin();
 
 }
