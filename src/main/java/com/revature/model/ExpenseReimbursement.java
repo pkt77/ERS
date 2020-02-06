@@ -6,7 +6,7 @@ public class ExpenseReimbursement {
 	double expenseReimburseAmount;
 	String employeeForeignKey;
 	String finManForeignKey;
-	Status status;
+	int status;
 	String expenseReimburseDescription;
 	
 	public ExpenseReimbursement() {
@@ -14,7 +14,7 @@ public class ExpenseReimbursement {
 	}
 
 	public ExpenseReimbursement(int expenseReimburseType, double expenseReimburseAmount, String employeeForeignKey,
-			String finManForeignKey, boolean status, String expenseReimburseDescription) {
+			String finManForeignKey, int status, String expenseReimburseDescription) {
 		super();
 		this.expenseReimburseType = expenseReimburseType;
 		this.expenseReimburseAmount = expenseReimburseAmount;
@@ -64,11 +64,11 @@ public class ExpenseReimbursement {
 		this.finManForeignKey = finManForeignKey;
 	}
 
-	public boolean isStatus() {
+	public int isStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
