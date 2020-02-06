@@ -26,6 +26,8 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 			String[] setting = line.split(" ");
 
 			settings.put(setting[0], setting[1]);
+			
+			
 		}
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
