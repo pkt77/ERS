@@ -15,16 +15,16 @@ import java.util.Map;
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
 	private final Connection con;
 
-    public ExpenseReimbursementDAOImplementation(String dbPropertiesPath) throws SQLException, IOException {
-        Map<String, String> settings = new HashMap<>();
-        BufferedReader reader = new BufferedReader(new FileReader(dbPropertiesPath));
-        String line;
+	public ExpenseReimbursementDAOImplementation(String dbPropertiesPath) throws SQLException, IOException {
+		Map<String, String> settings = new HashMap<>();
+		BufferedReader reader = new BufferedReader(new FileReader(dbPropertiesPath));
+		String line;
 
-        while ((line = reader.readLine()) != null) {
-            String[] setting = line.split(" ");
+		while ((line = reader.readLine()) != null) {
+			String[] setting = line.split(" ");
 
-            settings.put(setting[0], setting[1]);
-        }
+			settings.put(setting[0], setting[1]);
+		}
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 		con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL",
@@ -94,8 +94,9 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 
 	@Override
 	public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
-		try {			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="
-					+ approvalStatus + " WHERE reim_id="+reimburseID;
+		try {
+			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status=" + approvalStatus
+					+ " WHERE reim_id=" + reimburseID;
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			prepstate.executeUpdate();
 
@@ -132,41 +133,17 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 		}
 	}
 
+
 	@Override
-	public void emplogin() {
+	public boolean login(String emp_username, String emp_password) {
 		try {
-			String sql = "SELECT emp_uname, emp_pword FROM employee";
+			String sql = "SELECT emp_pword FROM employee WHERE emp_uname='" + emp_username + "'";
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			ResultSet rset = prepstate.executeQuery();
-			while (rset.next()) {
-				String employeeUsername = rset.getString("emp_uname");
-				String employeePassword = rset.getString("emp_pword");
-
-
-				System.out.println("Username:" + employeeUsername + "\n Password: " + employeePassword);
-			}
-			prepstate.executeUpdate();
+			return rset.next() && rset.getString("emp_pword").equals(emp_password);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void manlogin() {
-		try {
-			String sql = "SELECT man_uname, man_pword FROM managers";
-			PreparedStatement prepstate = con.prepareStatement(sql);
-			ResultSet rset = prepstate.executeQuery();
-			while (rset.next()) {
-				String managerUsername = rset.getString("man_uname");
-				String managerPassword = rset.getString("man_pword");
-
-
-				System.out.println("Username:" + managerUsername + "\n Password: " + managerPassword);
-			}
-			prepstate.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		return false;
 	}
 }
