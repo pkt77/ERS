@@ -1,21 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="eng">
 <head>
-<meta charset="ISO-8859-1">
-<title>Employee Reimbursement Login</title>
+    <title>Employee Reimbursement Login</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 </head>
 <body>
 
 <div class="login-container">
-		<!-- FRONT CONTROLLER EXAMPLE -->
-		<h3>Front Controller Design Pattern Example</h3>
-		<form method="post" action="/HELLOCONTROLLER/login.change">
-			<p>Please log in, arigato!</p>
-			<input placeholder="enter username" name="username"/><br>
-			<input placeholder="enter password" name="password"/><br>
-			<input type="submit" value="Login"/>
-		</form>
-	</div>
+    <h3>Front Controller Design Pattern Example</h3>
+    <form id="loginForm" method="post" onsubmit="">
+        <p>Please log in, arigato!</p>
+        <input placeholder="enter username" id="username"/><br>
+        <input placeholder="enter password" id="password"/><br>
+        <input type="submit" value="Login"/>
+    </form>
+</div>
 
+<script type="text/javascript">
+    $("#loginForm").submit(function (event) {
+        event.preventDefault();
+
+        $.post("/test", {
+            "username": document.getElementById("username").value,
+            "password": document.getElementById("password").value
+        }, function (data, stat) {
+            console.log(data);
+        });
+    });
+</script>
 </body>
 </html>
