@@ -2,9 +2,38 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>SubmitReimburse</title>
 </head>
 <body>
-
+<div class="reimburse-container">
+		<h1>Welcome to the Reimbursement Submission Page</h1>
+		<h2>All of the information below must be filled out to get approved</h2>
+<form method="post" action="/SubmitReimburseController/reimburse.change">
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Reimbursement Type</label>
+    <select class="form-control" id="exampleFormControlSelect1">
+      <option value="1">Lodging</option>
+      <option value="2">Travel</option>
+      <option value="3">Food</option>
+      <option value="4">Other</option>
+    </select>
+  </div>
+   <div class="form-group">
+    <label for="exampleFormControlInput1">Amount to be Reimbursed</label>
+    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="0000000">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Employee ID</label>
+    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="EmpID">
+  </div>
+  
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Description</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  
+  <button type="button" class="btn btn-primary btn-sm">Submit</button>
+</form>
+	</div>
 </body>
 </html>
