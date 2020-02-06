@@ -1,7 +1,6 @@
 package com.revature.DAO;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,19 +15,16 @@ import java.util.Map;
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
 	private final Connection con;
 
-	public ExpenseReimbursementDAOImplementation() throws SQLException, IOException {
-		Map<String, String> settings = new HashMap<>();
-		File file = new File("db.properties");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String line;
+    public ExpenseReimbursementDAOImplementation(String dbPropertiesPath) throws SQLException, IOException {
+        Map<String, String> settings = new HashMap<>();
+        BufferedReader reader = new BufferedReader(new FileReader(dbPropertiesPath));
+        String line;
 
-		while ((line = reader.readLine()) != null) {
-			String[] setting = line.split(" ");
+        while ((line = reader.readLine()) != null) {
+            String[] setting = line.split(" ");
 
-			settings.put(setting[0], setting[1]);
-			
-			
-		}
+            settings.put(setting[0], setting[1]);
+        }
 
 		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
 		con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL",
@@ -47,7 +43,7 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 		 * pwrd.equals(custPWRD)) { System.out.println("Thank you for logging in");
 		 * return; } } System.out.println("You're login credentials are invalid");
 		 * NewBankAppSwitch.showCustomerMenu();
-		 * 
+		 *
 		 * } catch (SQLException e) { e.printStackTrace(); }
 		 */
 	}
@@ -98,7 +94,7 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 
 	@Override
 	public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
-		try {			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="  
+		try {			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="
 					+ approvalStatus + " WHERE reim_id="+reimburseID;
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			prepstate.executeUpdate();
@@ -135,7 +131,7 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void emplogin() {
 		try {
@@ -154,7 +150,7 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void manlogin() {
 		try {
