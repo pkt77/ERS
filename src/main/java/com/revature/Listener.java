@@ -17,6 +17,8 @@ import java.sql.SQLException;
 public class Listener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
 
+    private ExpenseReimbursementDAO service;
+
     // Public constructor is required by servlet spec
     public Listener() {}
 
@@ -30,7 +32,7 @@ public class Listener implements ServletContextListener,
       */
         System.out.println("Created Listener");
         try {
-            ExpenseReimbursementDAO service = new ExpenseReimbursementDAOImplementation(sce.getServletContext().getRealPath("/WEB-INF/db.properties"));
+            service = new ExpenseReimbursementDAOImplementation(sce.getServletContext().getRealPath("/WEB-INF/db.properties"));
 
             sce.getServletContext().setAttribute("db", service);
         } catch (SQLException | IOException e) {

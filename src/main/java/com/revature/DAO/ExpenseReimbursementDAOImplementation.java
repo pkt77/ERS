@@ -9,8 +9,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.revature.model.ExpenseReimbursement;
 
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
 	private final Connection con;
@@ -66,37 +71,41 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 	}
 
 	@Override
-	public void viewAllReimburseReq() {
-		try {
-			String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id";
+	public List<ExpenseReimbursement> viewAllReimburseReq() {
+		try {String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id";
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			ResultSet rset = prepstate.executeQuery();
+			List<ExpenseReimbursement> allReimbursements = new ArrayList();
 			while (rset.next()) {
-				int reimbursmentID = rset.getInt("reim_id");
-				String fname = rset.getString("fname");
-				String lname = rset.getString("lname");
-				String rtype = rset.getString("r_type");
+				int reimbursementID = rset.getInt("reim_id");
+				String fName = rset.getString("fname");
+				String lName = rset.getString("lname");
+				String rType = rset.getString("r_type");
 				Double amount = rset.getDouble("amount");
-				java.sql.Date sub_date = rset.getDate("sub_date");
-				java.sql.Date dec_date = rset.getDate("dec_date");
-				String manFK_id = rset.getString("fk_man_id");
+				java.sql.Date subDate = rset.getDate("sub_date");
+				String empFKID = rset.getString("emp_id");
+				java.sql.Date decDate = rset.getDate("dec_date");
+				String manFKID = rset.getString("fk_man_id");
 				int status = rset.getInt("status");
 				String desc = rset.getString("description");
-
-				System.out.println("reimbursmentID:" + reimbursmentID + "\n fname: " + fname + "\n lname: " + lname
-						+ "\n rtype: " + rtype + "\n amount: " + amount + "\n sub_date:" + sub_date + "\n dec_date: "
-						+ dec_date + "\n man_id: " + manFK_id + "\n status: " + status + "\n desc: " + desc);
+				allReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
 			}
+			return allReimbursements;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
+		}return Collections.emptyList();
+}
 
 	@Override
 	public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
+<<<<<<< HEAD
 		try {
 			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status=" + approvalStatus
 					+ " WHERE reim_id=" + reimburseID;
+=======
+		try {String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="
+					+ approvalStatus + " WHERE reim_id="+reimburseID;
+>>>>>>> d4a50621e8c48865eef5040ae0b6e472cc2601c7
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			prepstate.executeUpdate();
 
@@ -106,30 +115,29 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 	}
 
 	@Override
-	public void viewPending() {
+	public List<ExpenseReimbursement> viewPending() {
 		try {
 			String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id WHERE status = 1";
 			PreparedStatement prepstate = con.prepareStatement(sql);
 			ResultSet rset = prepstate.executeQuery();
+			List<ExpenseReimbursement> pendingReimbursements = new ArrayList();
 			while (rset.next()) {
-				int reimbursmentID = rset.getInt("reim_id");
-				String fname = rset.getString("fname");
-				String lname = rset.getString("lname");
-				String rtype = rset.getString("r_type");
+				int reimbursementID = rset.getInt("reim_id");
+				String fName = rset.getString("fname");
+				String lName = rset.getString("lname");
+				String rType = rset.getString("r_type");
 				double amount = rset.getDouble("amount");
-				java.sql.Date sub_date = rset.getDate("sub_date");
-				java.sql.Date dec_date = rset.getDate("dec_date");
+				java.sql.Date subDate = rset.getDate("sub_date");
+				java.sql.Date decDate = rset.getDate("dec_date");
 				String manFK_id = rset.getString("fk_man_id");
 				int status = rset.getInt("status");
 				String desc = rset.getString("description");
-
-				System.out.println("reimbursmentID:" + reimbursmentID + "\n fname: " + fname + "\n lname: " + lname
-						+ "\n rtype: " + rtype + "\n amount: " + amount + "\n sub_date:" + sub_date + "\n dec_date: "
-						+ dec_date + "\n man_id: " + manFK_id + "\n status: " + status + "\n desc: " + desc);
+				pendingReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
 			}
-			prepstate.executeUpdate();
+			return pendingReimbursements;
 		} catch (SQLException e) {
 			e.printStackTrace();
+<<<<<<< HEAD
 		}
 	}
 
@@ -145,5 +153,8 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
 			e.printStackTrace();
 		}
 		return false;
+=======
+		}return Collections.emptyList();
+>>>>>>> d4a50621e8c48865eef5040ae0b6e472cc2601c7
 	}
 }

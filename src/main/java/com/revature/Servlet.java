@@ -14,7 +14,11 @@ import java.io.PrintStream;
 public class Servlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).emplogin();
 
+        System.out.println(request.getParameter("username"));
+        System.out.println(request.getParameter("password"));
+        response.getWriter().println("Failed!");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

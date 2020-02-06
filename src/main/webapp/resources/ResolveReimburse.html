@@ -2,9 +2,47 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Resolve Reimburse</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 </head>
 <body>
 
+<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>View ALL PENDING REIMBURSEMENT REQUESTS</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+		<input type="submit" value="Login"/>
+		</form>
+	</div>
+	
+	<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>VIEW ALL REIMBURSEMENTS (PENDING AND RESOLVED)</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+			<input placeholder="enter password" name="password"/><br>
+			<input type="submit" value="Login"/>
+		</form>
+	</div>
+	
+	<div class="login-container">
+		<!-- FRONT CONTROLLER EXAMPLE -->
+		<h3>RESOLVE PENDING REIMBURSEMENT REQUESTS</h3>
+		<form method="post" action="/HELLOCONTROLLER/login.change">
+			<fieldset>
+			<input placeholder="Finance Manager Number" name="username"/><br>
+			<legend>Select Status:</legend>
+			<select id  = "reimburse status">
+			<option value = "1">Approve</option>
+			<option value = "2">Deny</option>
+			</select>
+			<input type="Finance Manager Number" value="Login"/>
+			<input type="submit" value="Login"/>
+			</fieldset>
+		</form>
+	</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
