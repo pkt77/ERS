@@ -1,5 +1,6 @@
 package com.revature.DAO;
 
+import com.revature.model.Employee;
 import com.revature.model.ExpenseReimbursement;
 
 import java.io.BufferedReader;
@@ -105,6 +106,8 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
                     + " WHERE reim_id=" + reimburseID;
             PreparedStatement prepstate = con.prepareStatement(sql);
             prepstate.executeUpdate();
+            
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,15 +142,27 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
     }
 
     @Override
-    public boolean login(String emp_username, String emp_password) {
+    public Employee login(String emp_username, String emp_password) {
         try {
-            String sql = "SELECT emp_pword FROM employee WHERE emp_uname='" + emp_username + "'";
+            String sql = "SELECT * FROM employee WHERE emp_uname='" + emp_username + "'";
             PreparedStatement prepstate = con.prepareStatement(sql);
             ResultSet rset = prepstate.executeQuery();
-            return rset.next() && rset.getString("emp_pword").equals(emp_password);
+            if(rset.next()) {
+
+                String empID = rset.getString("emp_id");
+                String empUName = rset.getString("emp_uName");
+                String empPassword = rset.getString("emp_pWord");
+                int empType = rset.getInt("emp_type");
+                String empFName = rset.getString("fname");
+                String empLName = rset.getString("lname");	
+                
+                return new Employee(empID, empUName, empPassword, empType, empFName, empLName);
+            }
+            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }
