@@ -106,8 +106,6 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
                     + " WHERE reim_id=" + reimburseID;
             PreparedStatement prepstate = con.prepareStatement(sql);
             prepstate.executeUpdate();
-            
-            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,21 +143,24 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
     public Employee login(String emp_username, String emp_password) {
         try {
             String sql = "SELECT * FROM employee WHERE emp_uname='" + emp_username + "'";
-            PreparedStatement prepstate = con.prepareStatement(sql);
-            ResultSet rset = prepstate.executeQuery();
-            if(rset.next()) {
+            PreparedStatement prep = con.prepareStatement(sql);
+            ResultSet result = prep.executeQuery();
 
-                String empID = rset.getString("emp_id");
-                String empUName = rset.getString("emp_uName");
-                String empPassword = rset.getString("emp_pWord");
-                int empType = rset.getInt("emp_type");
-                String empFName = rset.getString("fname");
-                String empLName = rset.getString("lname");	
-                
+            if (result.next()) {
+                String empPassword = result.getString("emp_pWord");
+
+                if (!emp_password.equals(empPassword)) {
+                    return null;
+                }
+
+                String empID = result.getString("emp_id");
+                String empUName = result.getString("emp_uName");
+                int empType = result.getInt("emp_type");
+                String empFName = result.getString("fname");
+                String empLName = result.getString("lname");
+
                 return new Employee(empID, empUName, empPassword, empType, empFName, empLName);
             }
-            
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
