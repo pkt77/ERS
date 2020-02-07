@@ -1,5 +1,7 @@
 package com.revature.DAO;
 
+import com.revature.model.ExpenseReimbursement;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,146 +17,137 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.revature.model.ExpenseReimbursement;
-
 public class ExpenseReimbursementDAOImplementation implements ExpenseReimbursementDAO {
-	private final Connection con;
+    private final Connection con;
 
-	public ExpenseReimbursementDAOImplementation(String dbPropertiesPath) throws SQLException, IOException {
-		Map<String, String> settings = new HashMap<>();
-		BufferedReader reader = new BufferedReader(new FileReader(dbPropertiesPath));
-		String line;
+    public ExpenseReimbursementDAOImplementation(String dbPropertiesPath) throws SQLException, IOException {
+        Map<String, String> settings = new HashMap<>();
+        BufferedReader reader = new BufferedReader(new FileReader(dbPropertiesPath));
+        String line;
 
-		while ((line = reader.readLine()) != null) {
-			String[] setting = line.split(" ");
+        while ((line = reader.readLine()) != null) {
+            String[] setting = line.split(" ");
 
-			settings.put(setting[0], setting[1]);
-		}
+            settings.put(setting[0], setting[1]);
+        }
 
-		DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-		con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL",
-				settings.get("user"), settings.get("pass"));
-	}
+        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+        con = DriverManager.getConnection("jdbc:oracle:thin:@" + settings.get("url") + ":1521:ORCL",
+                settings.get("user"), settings.get("pass"));
+    }
 
-	@Override
-	public void reimburseLogIn(String uName, String pWord) {
-		/*
-		 * try { String sql =
-		 * "SELECT user_name, password FROM revature_customers WHERE rb_cust_id=" +
-		 * customerIDInfo; PreparedStatement prepState = con.prepareStatement(sql);
-		 * ResultSet revAccnts = prepState.executeQuery(); if (revAccnts.next()) {
-		 * custUN = revAccnts.getString("user_name"); pwrd =
-		 * revAccnts.getString("password"); if (custUN.equals(custUseNm) &&
-		 * pwrd.equals(custPWRD)) { System.out.println("Thank you for logging in");
-		 * return; } } System.out.println("You're login credentials are invalid");
-		 * NewBankAppSwitch.showCustomerMenu();
-		 *
-		 * } catch (SQLException e) { e.printStackTrace(); }
-		 */
-	}
+    @Override
+    public void reimburseLogIn(String uName, String pWord) {
+        /*
+         * try { String sql =
+         * "SELECT user_name, password FROM revature_customers WHERE rb_cust_id=" +
+         * customerIDInfo; PreparedStatement prepState = con.prepareStatement(sql);
+         * ResultSet revAccnts = prepState.executeQuery(); if (revAccnts.next()) {
+         * custUN = revAccnts.getString("user_name"); pwrd =
+         * revAccnts.getString("password"); if (custUN.equals(custUseNm) &&
+         * pwrd.equals(custPWRD)) { System.out.println("Thank you for logging in");
+         * return; } } System.out.println("You're login credentials are invalid");
+         * NewBankAppSwitch.showCustomerMenu();
+         *
+         * } catch (SQLException e) { e.printStackTrace(); }
+         */
+    }
 
-	@Override
-	public void employeeSubmitReimburse(int reimburseType, double amount, String empForKey, String description) {
-		try {
-			String sql = "INSERT INTO reimburse(r_type, amount, sub_date, fk_emp_id, status, description) VALUES(?,?,?,?,?,?)";
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setInt(1, reimburseType);
-			ps.setDouble(2, amount);
-			ps.setDate(3, new Date(System.currentTimeMillis()));
-			ps.setString(4, empForKey);
-			ps.setInt(5, 1);
-			ps.setString(6, description);
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void employeeSubmitReimburse(int reimburseType, double amount, String empForKey, String description) {
+        try {
+            String sql = "INSERT INTO reimburse(r_type, amount, sub_date, fk_emp_id, status, description) VALUES(?,?,?,?,?,?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, reimburseType);
+            ps.setDouble(2, amount);
+            ps.setDate(3, new Date(System.currentTimeMillis()));
+            ps.setString(4, empForKey);
+            ps.setInt(5, 1);
+            ps.setString(6, description);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public List<ExpenseReimbursement> viewAllReimburseReq() {
-		try {String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id";
-			PreparedStatement prepstate = con.prepareStatement(sql);
-			ResultSet rset = prepstate.executeQuery();
-			List<ExpenseReimbursement> allReimbursements = new ArrayList();
-			while (rset.next()) {
-				int reimbursementID = rset.getInt("reim_id");
-				String fName = rset.getString("fname");
-				String lName = rset.getString("lname");
-				String rType = rset.getString("r_type");
-				Double amount = rset.getDouble("amount");
-				java.sql.Date subDate = rset.getDate("sub_date");
-				String empFKID = rset.getString("emp_id");
-				java.sql.Date decDate = rset.getDate("dec_date");
-				String manFKID = rset.getString("fk_man_id");
-				int status = rset.getInt("status");
-				String desc = rset.getString("description");
-				allReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
-			}
-			return allReimbursements;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}return Collections.emptyList();
-}
+    @Override
+    public List<ExpenseReimbursement> viewAllReimburseReq() {
+        try {
+            String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id";
+            PreparedStatement prepstate = con.prepareStatement(sql);
+            ResultSet rset = prepstate.executeQuery();
+            List<ExpenseReimbursement> allReimbursements = new ArrayList();
+            while (rset.next()) {
+                int reimbursementID = rset.getInt("reim_id");
+                String fName = rset.getString("fname");
+                String lName = rset.getString("lname");
+                String rType = rset.getString("r_type");
+                Double amount = rset.getDouble("amount");
+                java.sql.Date subDate = rset.getDate("sub_date");
+                String empFKID = rset.getString("emp_id");
+                java.sql.Date decDate = rset.getDate("dec_date");
+                String manFKID = rset.getString("fk_man_id");
+                int status = rset.getInt("status");
+                String desc = rset.getString("description");
+                allReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
+            }
+            return allReimbursements;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
 
-	@Override
-	public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
-<<<<<<< HEAD
-		try {
-			String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status=" + approvalStatus
-					+ " WHERE reim_id=" + reimburseID;
-=======
-		try {String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status="
-					+ approvalStatus + " WHERE reim_id="+reimburseID;
->>>>>>> d4a50621e8c48865eef5040ae0b6e472cc2601c7
-			PreparedStatement prepstate = con.prepareStatement(sql);
-			prepstate.executeUpdate();
+    @Override
+    public void resolveReimburse(String finManForeignKey, int approvalStatus, int reimburseID) {
+        try {
+            String sql = "UPDATE reimburse SET fk_man_id=" + "'" + finManForeignKey + "'" + ",status=" + approvalStatus
+                    + " WHERE reim_id=" + reimburseID;
+            PreparedStatement prepstate = con.prepareStatement(sql);
+            prepstate.executeUpdate();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public List<ExpenseReimbursement> viewPending() {
-		try {
-			String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id WHERE status = 1";
-			PreparedStatement prepstate = con.prepareStatement(sql);
-			ResultSet rset = prepstate.executeQuery();
-			List<ExpenseReimbursement> pendingReimbursements = new ArrayList();
-			while (rset.next()) {
-				int reimbursementID = rset.getInt("reim_id");
-				String fName = rset.getString("fname");
-				String lName = rset.getString("lname");
-				String rType = rset.getString("r_type");
-				double amount = rset.getDouble("amount");
-				java.sql.Date subDate = rset.getDate("sub_date");
-				java.sql.Date decDate = rset.getDate("dec_date");
-				String manFK_id = rset.getString("fk_man_id");
-				int status = rset.getInt("status");
-				String desc = rset.getString("description");
-				pendingReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
-			}
-			return pendingReimbursements;
-		} catch (SQLException e) {
-			e.printStackTrace();
-<<<<<<< HEAD
-		}
-	}
+    @Override
+    public List<ExpenseReimbursement> viewPending() {
+        try {
+            String sql = "SELECT * FROM reimburse a INNER JOIN employee b ON b.emp_id = a.fk_emp_id WHERE status = 1";
+            PreparedStatement prepstate = con.prepareStatement(sql);
+            ResultSet rset = prepstate.executeQuery();
+            List<ExpenseReimbursement> pendingReimbursements = new ArrayList();
+            while (rset.next()) {
+                int reimbursementID = rset.getInt("reim_id");
+                String fName = rset.getString("fname");
+                String lName = rset.getString("lname");
+                String rType = rset.getString("r_type");
+                double amount = rset.getDouble("amount");
+                java.sql.Date subDate = rset.getDate("sub_date");
+                java.sql.Date decDate = rset.getDate("dec_date");
+                String manFK_id = rset.getString("fk_man_id");
+                int status = rset.getInt("status");
+                String desc = rset.getString("description");
+                pendingReimbursements.add(new ExpenseReimbursement(reimbursementID, fName, lName, rType, amount, subDate, decDate, status, desc));
+            }
+            return pendingReimbursements;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Collections.emptyList();
+    }
 
-
-	@Override
-	public boolean login(String emp_username, String emp_password) {
-		try {
-			String sql = "SELECT emp_pword FROM employee WHERE emp_uname='" + emp_username + "'";
-			PreparedStatement prepstate = con.prepareStatement(sql);
-			ResultSet rset = prepstate.executeQuery();
-			return rset.next() && rset.getString("emp_pword").equals(emp_password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-=======
-		}return Collections.emptyList();
->>>>>>> d4a50621e8c48865eef5040ae0b6e472cc2601c7
-	}
+    @Override
+    public boolean login(String emp_username, String emp_password) {
+        try {
+            String sql = "SELECT emp_pword FROM employee WHERE emp_uname='" + emp_username + "'";
+            PreparedStatement prepstate = con.prepareStatement(sql);
+            ResultSet rset = prepstate.executeQuery();
+            return rset.next() && rset.getString("emp_pword").equals(emp_password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
