@@ -12,8 +12,12 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).login(request.getParameter("username"), request.getParameter("password"))) {
+        String username = request.getParameter("username");
+
+        if (((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).login(username, request.getParameter("password"))) {
             response.getWriter().println("/resources/SubmitReimburse.html");
+            request.getSession().setAttribute("username", username);
+            request.getSession().setMaxInactiveInterval(5 * 60);
         } else {
             response.getWriter().print("Failed!");
         }
