@@ -9,28 +9,28 @@
 <div class="reimburse-container">
 		<h1>Welcome to the Reimbursement Submission Page</h1>
 		<h2>All of the information below must be filled out to get approved</h2>
-<form method="post" action="/SubmitReimburseController/reimburse.change">
+<form method="post" action="/SubmitReimburseController">
   <div class="form-group">
     <label for="exampleFormControlSelect1">Reimbursement Type</label>
-    <select class="form-control" id="exampleFormControlSelect1">
-      <option value="1">Lodging</option>
-      <option value="2">Travel</option>
-      <option value="3">Food</option>
-      <option value="4">Other</option>
+    <select class="form-control" id="reimbursement type">
+      <option value="1" id = "lodging">Lodging</option>
+      <option value="2" id = "travel">Travel</option>
+      <option value="3" id = "food"> Food</option>
+      <option value="4" id = "other">Other</option>
     </select>
   </div>
    <div class="form-group">
     <label for="exampleFormControlInput1">Amount to be Reimbursed</label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="0000000">
+    <input type="email" class="form-control" id="amount" placeholder="$0000.00">
   </div>
   <div class="form-group">
     <label for="exampleFormControlInput1">Employee ID</label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="EmpID">
+    <input type="email" class="form-control" id="employee ID" placeholder="EmpID">
   </div>
   
   <div class="form-group">
     <label for="exampleFormControlTextarea1">Description</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <textarea class="form-control" id="Description" rows="3"></textarea>
   </div>
   
   <button type="button" class="btn btn-primary btn-sm">Submit</button>

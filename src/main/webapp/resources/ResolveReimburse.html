@@ -10,8 +10,8 @@
 
 <div class="login-container">
 		<!-- FRONT CONTROLLER EXAMPLE -->
-		<h3>View ALL PENDING REIMBURSEMENT REQUESTS</h3>
-		<form method="post" action="/HELLOCONTROLLER/login.change">
+		<h3>VIEW ALL PENDING REIMBURSEMENT REQUESTS</h3>
+		<form method="post" action="/SubmitReimburseController">
 		<input type="submit" value="Login"/>
 		</form>
 	</div>
@@ -19,8 +19,7 @@
 	<div class="login-container">
 		<!-- FRONT CONTROLLER EXAMPLE -->
 		<h3>VIEW ALL REIMBURSEMENTS (PENDING AND RESOLVED)</h3>
-		<form method="post" action="/HELLOCONTROLLER/login.change">
-			<input placeholder="enter password" name="password"/><br>
+		<form method="post" action="/SubmitReimburseController">
 			<input type="submit" value="Login"/>
 		</form>
 	</div>
@@ -28,7 +27,7 @@
 	<div class="login-container">
 		<!-- FRONT CONTROLLER EXAMPLE -->
 		<h3>RESOLVE PENDING REIMBURSEMENT REQUESTS</h3>
-		<form method="post" action="/HELLOCONTROLLER/login.change">
+		<form method="post" action="/SubmitReimburseController">
 			<fieldset>
 			<input placeholder="Finance Manager Number" name="username"/><br>
 			<legend>Select Status:</legend>
