@@ -1,5 +1,6 @@
 package com.revature.DAO;
 
+import com.revature.model.Employee;
 import com.revature.model.ExpenseReimbursement;
 
 import java.io.BufferedReader;
@@ -139,15 +140,30 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
     }
 
     @Override
-    public boolean login(String emp_username, String emp_password) {
+    public Employee login(String emp_username, String emp_password) {
         try {
-            String sql = "SELECT emp_pword FROM employee WHERE emp_uname='" + emp_username + "'";
-            PreparedStatement prepstate = con.prepareStatement(sql);
-            ResultSet rset = prepstate.executeQuery();
-            return rset.next() && rset.getString("emp_pword").equals(emp_password);
+            String sql = "SELECT * FROM employee WHERE emp_uname='" + emp_username + "'";
+            PreparedStatement prep = con.prepareStatement(sql);
+            ResultSet result = prep.executeQuery();
+
+            if (result.next()) {
+                String empPassword = result.getString("emp_pWord");
+
+                if (!emp_password.equals(empPassword)) {
+                    return null;
+                }
+
+                String empID = result.getString("emp_id");
+                String empUName = result.getString("emp_uName");
+                int empType = result.getInt("emp_type");
+                String empFName = result.getString("fname");
+                String empLName = result.getString("lname");
+
+                return new Employee(empID, empUName, empPassword, empType, empFName, empLName);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }

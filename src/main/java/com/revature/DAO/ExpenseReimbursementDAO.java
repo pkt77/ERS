@@ -1,5 +1,6 @@
 package com.revature.DAO;
 
+import com.revature.model.Employee;
 import com.revature.model.ExpenseReimbursement;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ExpenseReimbursementDAO {
 
     void resolveReimburse(String finManFM, int appStat, int rID);
 
-    boolean login(String man_username, String man_password);
+    Employee login(String man_username, String man_password);
 
     List<ExpenseReimbursement> viewPending();
 }
