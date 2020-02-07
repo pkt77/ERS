@@ -7,20 +7,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ExpenseReimburseMasterHelper {
-	
-       
-    public ExpenseReimburseMasterHelper() {
-        super();
+
+	public static void process(HttpServletRequest request, HttpServletResponse response) {
+    	
+    	System.out.println(request.getRequestURI());
+    	
+    	switch(request).getURI()) {
+    	
+    	//case "/HomeController":
+    		
+    	//break;
+    	case "/LoginController":
+    			
+    	break;
+    	case "/SubmitReimburseController":
+    	break;
+    	case "/SubmitMoreReimburse":
+    	break;
+    	case "/ResolveReimburseController":
+    	break;
+    	case "/ResolveMoreReimburseController":
+    	break;
+    	
+    	}
     }
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		doGet(request, response);
-	}
-
 }
