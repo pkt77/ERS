@@ -1,59 +1,107 @@
 <!DOCTYPE html>
 <html lang="eng">
 <head>
-    <title>Resolve Reimburse</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<title>Resolve Reimburse</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
 
-    <script type="text/javascript">
-        var ajax = new XMLHttpRequest();
+<style>
+th, td, p, input {
+	font: 14px Verdana;
+}
 
-        ajax.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                var list = JSON.parse(this.responseText);
-                console.log(list);
-            }
-        };
+table, th, td {
+	border: solid 1px #DDD;
+	border-collapse: collapse;
+	padding: 2px 3px;
+	text-align: center;
+}
 
-        function getList() {
-            ajax.open("GET", "/reimbursementlist", true);
-            ajax.send();
-        }
-    </script>
+th {
+	font-weight: bold;
+}
+</style>
+
+<script type="text/javascript">
+	var ajax = new XMLHttpRequest();
+
+	ajax.onreadystatechange = function() {
+		if (this.readyState === 4 && this.status === 200) {
+			var list = JSON.parse(this.responseText);
+			var table = document.getElementById("display")
+
+			// EXTRACT VALUE FOR HTML HEADER.
+			
+
+			// ADD JSON DATA TO THE TABLE AS ROWS.
+			for (var i = 0; i < list.length; i++) {
+				var tr = document.createElement("tr");
+				var cell = tr.insertCell(-1);
+				var d = new Date(list[i].submitDate);
+				cell.innerHTML = list[i].firstName;
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = list[i].lasgtName;
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = list[i].reimbursementType;
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = list[i].expenseReimburseAmount;
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = list[i].expenseReimburseDescription;
+				
+				
+				console.log(list[i]);
+				var d = new Date(list[i].submitDate);
+				console.log(d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate());
+
+				var cell = tr.insertCell(-1);
+				cell.innerHTML = "<button onclick='status(true)'>Approve</button>";
+
+				cell = tr.insertCell(-1);
+				cell.innerHTML = "<button>Deny</button>";
+
+				table.appendChild(tr);
+			}
+		}
+	};
+
+	function status(approved) {
+		var update = new XMLHttpRequest();
+
+		update.open("POST", "resolve", true);
+		update.send();
+	}
+
+	function getList() {
+		ajax.open("GET", "/reimbursementlist", true);
+		ajax.send();
+	}
+	window.onload = function() {
+
+		getList();
+	}
+</script>
 </head>
 <body>
+	<table id="display">
+		<thead>
+			<tr>			
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Reimbursement Type</th>
+				<th>Amount to be Reimbursed</th>
+				<th>Submit Date</th>
+				<th>Description</th>
+				<th>Approve</th>
+				<th>Deny</th>
+			</tr>
+		</thead>
+		<tbody id="display">
 
-<div class="login-container">
-    <!-- FRONT CONTROLLER EXAMPLE -->
-    <h3>VIEW ALL PENDING REIMBURSEMENT REQUESTS</h3>
-    <form method="post" action="/SubmitReimburseController">
-        <input type="submit" value="Login"/>
-    </form>
-</div>
-
-<div class="login-container">
-    <!-- FRONT CONTROLLER EXAMPLE -->
-    <h3>VIEW ALL REIMBURSEMENTS (PENDING AND RESOLVED)</h3>
-    <form method="post" action="/SubmitReimburseController">
-        <input type="submit" value="Login"/>
-    </form>
-</div>
-
-<div class="login-container">
-    <!-- FRONT CONTROLLER EXAMPLE -->
-    <h3>RESOLVE PENDING REIMBURSEMENT REQUESTS</h3>
-    <form method="post" action="/SubmitReimburseController">
-        <fieldset>
-            <input placeholder="Finance Manager Number" name="username"/><br>
-            <legend>Select Status:</legend>
-            <select id="reimburse status">
-                <option value="1">Approve</option>
-                <option value="2">Deny</option>
-            </select>
-            <input type="Finance Manager Number" value="Login"/>
-            <input type="submit" value="Login"/>
-        </fieldset>
-    </form>
-</div>
+		</tbody>
+	</table>
 </body>
 </html>
