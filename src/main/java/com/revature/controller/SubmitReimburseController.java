@@ -1,25 +1,28 @@
 package com.revature.controller;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
+import com.revature.DAO.ExpenseReimbursementDAOImplementation;
+import com.revature.model.Employee;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class SubmitReimburseController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    public SubmitReimburseController() {
-        super();
-       
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Employee employee = (Employee) request.getSession().getAttribute("employee");
+
+        if (employee == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).employeeSubmitReimburse(
+                Integer.parseInt(request.getParameter("reimbursement_type")),
+                Double.parseDouble(request.getParameter("amount")),
+                employee.getEmpID(),
+                request.getParameter("description")
+        );
     }
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
 }
