@@ -13,7 +13,7 @@ public interface ExpenseReimbursementDAO {
 
     List<ExpenseReimbursement> viewAllReimburseReq();
 
-    void resolveReimburse(String finManFM, int appStat, int rID);
+    void resolveReimburse(String finManForeignKey, boolean approved, int reimburseID);
 
     Employee login(String man_username, String man_password);
 

@@ -1,107 +1,116 @@
 <!DOCTYPE html>
 <html lang="eng">
 <head>
-<title>Resolve Reimburse</title>
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-	crossorigin="anonymous">
+    <title>Resolve Reimburse</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
 
-<style>
-th, td, p, input {
-	font: 14px Verdana;
-}
+    <style>
+        th, td, p, input {
+            font: 14px Verdana;
+        }
 
-table, th, td {
-	border: solid 1px #DDD;
-	border-collapse: collapse;
-	padding: 2px 3px;
-	text-align: center;
-}
+        table, th, td {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
 
-th {
-	font-weight: bold;
-}
-</style>
+        th {
+            font-weight: bold;
+        }
+    </style>
 
-<script type="text/javascript">
-	var ajax = new XMLHttpRequest();
+    <script type="text/javascript">
+        var ajax = new XMLHttpRequest();
 
-	ajax.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200) {
-			var list = JSON.parse(this.responseText);
-			var table = document.getElementById("display")
+        ajax.onreadystatechange = function () {
+            if (this.readyState !== 4 || this.status !== 200) {
+                return;
+            }
 
-			// EXTRACT VALUE FOR HTML HEADER.
-			
+            var list = JSON.parse(this.responseText);
+            var body = document.getElementById("display");
 
-			// ADD JSON DATA TO THE TABLE AS ROWS.
-			for (var i = 0; i < list.length; i++) {
-				var tr = document.createElement("tr");
-				var cell = tr.insertCell(-1);
-				var d = new Date(list[i].submitDate);
-				cell.innerHTML = list[i].firstName;
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = list[i].lasgtName;
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = list[i].reimbursementType;
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = list[i].expenseReimburseAmount;
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = list[i].expenseReimburseDescription;
-				
-				
-				console.log(list[i]);
-				var d = new Date(list[i].submitDate);
-				console.log(d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate());
+            for (var i = 0; i < list.length; i++) {
+                var tr = document.createElement("tr");
+                var date = new Date(list[i].submitDate);
 
-				var cell = tr.insertCell(-1);
-				cell.innerHTML = "<button onclick='status(true)'>Approve</button>";
+                tr.id = list[i].id;
 
-				cell = tr.insertCell(-1);
-				cell.innerHTML = "<button>Deny</button>";
+                var cell = tr.insertCell(-1);
+                cell.innerHTML = list[i].firstName + " " + list[i].lastName;
 
-				table.appendChild(tr);
-			}
-		}
-	};
+                cell = tr.insertCell(-1);
+                var type = list[i].reimbursementType;
 
-	function status(approved) {
-		var update = new XMLHttpRequest();
+                if (type === "1") {
+                    cell.innerHTML = "Lodging";
+                } else if (type === "2") {
+                    cell.innerHTML = "Travel";
+                } else if (type === "3") {
+                    cell.innerHTML = "Food";
+                } else if (type === "4") {
+                    cell.innerHTML = "Other";
+                }
 
-		update.open("POST", "resolve", true);
-		update.send();
-	}
+                cell = tr.insertCell(-1);
+                cell.innerHTML = list[i].expenseReimburseAmount;
 
-	function getList() {
-		ajax.open("GET", "/reimbursementlist", true);
-		ajax.send();
-	}
-	window.onload = function() {
+                cell = tr.insertCell(-1);
+                cell.innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
-		getList();
-	}
-</script>
+                cell = tr.insertCell(-1);
+                cell.innerHTML = list[i].expenseReimburseDescription;
+
+                cell = tr.insertCell(-1);
+                cell.innerHTML = "<button onclick='status(" + tr.id + ", true)'>Approve</button>" +
+                    "<button onclick='status(" + tr.id + ", false)'>Deny</button>";
+
+                body.appendChild(tr);
+            }
+        };
+
+        function status(id, approved) {
+            var update = new XMLHttpRequest();
+            console.log(id);
+
+            document.getElementById(id).remove();
+
+            update.open("POST", "/resolve", true);
+            update.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            update.send("id=" + id + "&status=" + approved);
+        }
+
+        function getList() {
+            ajax.open("GET", "/reimbursementlist", true);
+            ajax.send();
+        }
+
+        window.onload = function () {
+            getList();
+        }
+    </script>
 </head>
-<body>
-	<table id="display">
-		<thead>
-			<tr>			
-				<th>First Name</th>
-				<th>Last Name</th>
-				<th>Reimbursement Type</th>
-				<th>Amount to be Reimbursed</th>
-				<th>Submit Date</th>
-				<th>Description</th>
-				<th>Approve</th>
-				<th>Deny</th>
-			</tr>
-		</thead>
-		<tbody id="display">
 
-		</tbody>
-	</table>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Employee</th>
+        <th>Reimbursement Type</th>
+        <th>Amount To Be Reimbursed</th>
+        <th>Submit Date</th>
+        <th>Description</th>
+        <th>Resolution</th>
+    </tr>
+    </thead>
+
+    <tbody id="display">
+    </tbody>
+</table>
 </body>
 </html>

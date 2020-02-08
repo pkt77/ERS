@@ -38,4 +38,14 @@
         <servlet-name>Submit</servlet-name>
         <url-pattern>/submit</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Resolve</servlet-name>
+        <servlet-class>com.revature.controller.ResolveReimburseController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resolve</servlet-name>
+        <url-pattern>/resolve</url-pattern>
+    </servlet-mapping>
 </web-app>
