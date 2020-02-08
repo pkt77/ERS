@@ -12,6 +12,7 @@ import java.io.IOException;
 @WebServlet(name = "Servlet")
 public class LoginServlet extends HttpServlet {
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Employee employee = ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).login(request.getParameter("username"), request.getParameter("password"));
 
@@ -20,9 +21,9 @@ public class LoginServlet extends HttpServlet {
             request.getSession().setMaxInactiveInterval(5 * 60);
 
             if (employee.getEmpType() == 0) {
-                response.getWriter().println("/resources/SubmitReimburse.html");
+                response.sendRedirect("/resources/SubmitReimburse.html");
             } else {
-                response.getWriter().println("/resources/ResolveReimburse.html");
+                response.sendRedirect("/resources/ResolveReimburse.html");
             }
         } else {
             response.getWriter().print("Failed!");

@@ -5,22 +5,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
     <script type="text/javascript">
         function login(event) {
             event.preventDefault();
 
-            $.post("/login", {
-                "username": document.getElementById("username").value,
-                "password": document.getElementById("password").value
-            }, function (data, stat) {
-                if (data === "Failed!") {
-                    document.getElementById("failed").innerHTML = data;
-                } else {
-                    window.location.href = data;
+            var ajax = new XMLHttpRequest();
+
+            ajax.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    if (this.responseText === "Failed!") {
+                        document.getElementById("failed").innerHTML = this.responseText;
+                    } else {
+                        window.location.href = this.responseURL;
+                    }
                 }
-            })
+            };
+
+            ajax.open("POST", "/login", true);
+            ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            ajax.send("username=" + event.target.elements.username.value + "&password=" + event.target.elements.password.value);
         }
     </script>
 </head>
@@ -30,8 +33,8 @@
     <h3>Front Controller Design Pattern Example</h3>
     <form id="loginForm" method="post" onsubmit="login(event)">
         <p>Please log in, arigato!</p>
-        <input placeholder="enter username" id="username"/><br>
-        <input placeholder="enter password" id="password"/><br>
+        <input placeholder="enter username" name="username"/><br>
+        <input placeholder="enter password" name="password"/><br>
         <span id="failed"></span>
         <input type="submit" value="Login"/>
     </form>
