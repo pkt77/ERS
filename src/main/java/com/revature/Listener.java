@@ -2,6 +2,8 @@ package com.revature;
 
 import com.revature.DAO.ExpenseReimbursementDAO;
 import com.revature.DAO.ExpenseReimbursementDAOImplementation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -16,6 +18,8 @@ import java.sql.SQLException;
 @WebListener()
 public class Listener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
+
+    public static final Logger LOGGER = LogManager.getLogger("Reimbursement");
 
     private ExpenseReimbursementDAO service;
 
@@ -45,6 +49,7 @@ public class Listener implements ServletContextListener,
          (the Web application) is undeployed or
          Application Server shuts down.
       */
+        System.out.println("Context destroyed");
     }
 
     // -------------------------------------------------------
@@ -56,7 +61,7 @@ public class Listener implements ServletContextListener,
 
     public void sessionDestroyed(HttpSessionEvent se) {
         /* Session is destroyed. */
-        System.out.println("Destroyed");
+        System.out.println("Destroyed session for " + se.getSession().getAttribute("employee"));
     }
 
     // -------------------------------------------------------

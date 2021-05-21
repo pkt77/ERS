@@ -1,6 +1,7 @@
 package com.revature.controller;
 
 import com.revature.DAO.ExpenseReimbursementDAOImplementation;
+import com.revature.Listener;
 import com.revature.model.Employee;
 
 import javax.servlet.http.HttpServlet;
@@ -19,10 +20,15 @@ public class ResolveReimburseController extends HttpServlet {
             return;
         }
 
+        boolean approved = Boolean.parseBoolean(request.getParameter("status"));
+        int id = Integer.parseInt(request.getParameter("id"));
+
         ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).resolveReimburse(
                 employee.getEmpID(),
-                Boolean.parseBoolean(request.getParameter("status")),
-                Integer.parseInt(request.getParameter("id"))
+                approved,
+                id
         );
+
+        Listener.LOGGER.warn(employee.getEmpUserName() + (approved ? " approved" : " denied") + " request " + id);
     }
 }

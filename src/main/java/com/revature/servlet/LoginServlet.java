@@ -1,6 +1,7 @@
 package com.revature.servlet;
 
 import com.revature.DAO.ExpenseReimbursementDAOImplementation;
+import com.revature.Listener;
 import com.revature.model.Employee;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,11 +15,14 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Employee employee = ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).login(request.getParameter("username"), request.getParameter("password"));
+        String username = request.getParameter("username");
+        Employee employee = ((ExpenseReimbursementDAOImplementation) request.getServletContext().getAttribute("db")).login(username, request.getParameter("password"));
 
         if (employee != null) {
             request.getSession().setAttribute("employee", employee);
             request.getSession().setMaxInactiveInterval(5 * 60);
+
+            Listener.LOGGER.warn(username + " logged in!");
 
             if (employee.getEmpType() == 0) {
                 response.sendRedirect("/resources/SubmitReimburse.html");
@@ -26,6 +30,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("/resources/ResolveReimburse.html");
             }
         } else {
+            Listener.LOGGER.warn(username + " failed to login!");
             response.getWriter().print("Failed!");
         }
     }

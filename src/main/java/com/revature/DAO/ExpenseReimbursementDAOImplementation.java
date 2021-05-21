@@ -57,14 +57,13 @@ public class ExpenseReimbursementDAOImplementation implements ExpenseReimburseme
     @Override
     public void employeeSubmitReimburse(int reimburseType, double amount, String empForKey, String description) {
         try {
-            String sql = "INSERT INTO reimburse(r_type, amount, sub_date, fk_emp_id, status, description) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO reimburse(r_type, amount, sub_date, fk_emp_id, description) VALUES(?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, reimburseType);
             ps.setDouble(2, amount);
             ps.setDate(3, new Date(System.currentTimeMillis()));
             ps.setString(4, empForKey);
-            ps.setInt(5, 1);
-            ps.setString(6, description);
+            ps.setString(5, description);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

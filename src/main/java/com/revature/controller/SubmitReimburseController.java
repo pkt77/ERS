@@ -1,6 +1,7 @@
 package com.revature.controller;
 
 import com.revature.DAO.ExpenseReimbursementDAOImplementation;
+import com.revature.Listener;
 import com.revature.model.Employee;
 
 import javax.servlet.http.HttpServlet;
@@ -24,5 +25,8 @@ public class SubmitReimburseController extends HttpServlet {
                 employee.getEmpID(),
                 request.getParameter("description")
         );
+
+        Listener.LOGGER.info(employee.getEmpUserName() + " submitted a new request");
+        response.sendRedirect("/resources/SubmitReimburse.html");
     }
 }

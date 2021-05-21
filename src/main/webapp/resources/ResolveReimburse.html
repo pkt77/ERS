@@ -2,25 +2,15 @@
 <html lang="eng">
 <head>
     <title>Resolve Reimburse</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/css/styles.css">
 
     <style>
-        th, td, p, input {
-            font: 14px Verdana;
-        }
-
-        table, th, td {
-            border: solid 1px #DDD;
-            border-collapse: collapse;
-            padding: 2px 3px;
-            text-align: center;
-        }
-
-        th {
-            font-weight: bold;
+        .removing {
+            transition: all 2s;
+            opacity: 0;
         }
     </style>
 
@@ -58,7 +48,7 @@
                 }
 
                 cell = tr.insertCell(-1);
-                cell.innerHTML = list[i].expenseReimburseAmount;
+                cell.innerHTML = "$" + list[i].expenseReimburseAmount;
 
                 cell = tr.insertCell(-1);
                 cell.innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
@@ -67,8 +57,8 @@
                 cell.innerHTML = list[i].expenseReimburseDescription;
 
                 cell = tr.insertCell(-1);
-                cell.innerHTML = "<button onclick='status(" + tr.id + ", true)'>Approve</button>" +
-                    "<button onclick='status(" + tr.id + ", false)'>Deny</button>";
+                cell.innerHTML = "<button onclick='status(" + tr.id + ", true)' class='btn btn-success'>Approve</button>" +
+                    "<button onclick='status(" + tr.id + ", false)' class='btn btn-danger'>Deny</button>";
 
                 body.appendChild(tr);
             }
@@ -76,9 +66,11 @@
 
         function status(id, approved) {
             var update = new XMLHttpRequest();
-            console.log(id);
 
-            document.getElementById(id).remove();
+            document.getElementById(id).className = "removing";
+            window.setTimeout(function () {
+                document.getElementById(id).remove();
+            }, 2000);
 
             update.open("POST", "/resolve", true);
             update.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -97,7 +89,7 @@
 </head>
 
 <body>
-<table>
+<table class="table">
     <thead>
     <tr>
         <th>Employee</th>
